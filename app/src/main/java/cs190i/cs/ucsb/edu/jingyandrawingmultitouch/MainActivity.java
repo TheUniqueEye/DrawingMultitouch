@@ -17,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Log.d("Finger Painting", "Finger Painting");
+        Log.d("Finger Painting", "Finger Painting Start!");
 
         final CanvasView canvasView = (CanvasView) findViewById(R.id.canvas);
 
@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 canvasView.setBrushSize(progress > 0 ? progress : 1);
-                Log.i("brushSize",progress+"");
+                //Log.i("brushSize",progress+"");
             }
 
             @Override
