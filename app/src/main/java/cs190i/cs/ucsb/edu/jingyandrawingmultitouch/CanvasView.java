@@ -36,6 +36,8 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
     public int brushSize;
     public ArrayList<Integer> brushSizes = new ArrayList<>();
 
+    private boolean isPainted = false;
+
     private float x = 0;
     private float y = 0;
 
@@ -57,19 +59,22 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
 
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        ((Activity) getContext()).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        if(!isPainted) {
+            DisplayMetrics displayMetrics = new DisplayMetrics();
+            ((Activity) getContext()).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
 
-        width = displayMetrics.widthPixels;
-        height = displayMetrics.heightPixels;
+            width = displayMetrics.widthPixels;
+            height = displayMetrics.heightPixels;
+            int size = Math.max(width,height);
 
-        bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        paintCanvas = new Canvas();
-        paintCanvas.setBitmap(bitmap);
+            bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
+            paintCanvas = new Canvas();
+            paintCanvas.setBitmap(bitmap);
 
-        paint = new Paint();
-        paint.setStyle(Paint.Style.STROKE);
-        paint.setColor(Color.RED);
+            isPainted = true;
+
+        }
+
 
         Canvas canvas = holder.lockCanvas();
         canvas.drawColor(Color.WHITE);
@@ -111,12 +116,8 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
         paint.setColor(Color.RED);
 
         // draw all paths
-        for (int i = 0; i < mPaths.size(); i++) {
-
-            paint.setStrokeWidth(brushSizes.get(i));
-            paintCanvas.drawPath(mPaths.get(i), paint);
-
-        }
+        paint.setStrokeWidth(brushSize);
+        paintCanvas.drawPath(mPath, paint);
 
         Canvas canvas = holder.lockCanvas();
         canvas.drawColor(Color.WHITE);
@@ -148,7 +149,6 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
         // draw current path
         //Log.i("brushSize",brushSize+"");
         paint.setStrokeWidth(brushSize);
-
         paintCanvas.drawPath(mPath, paint);
     }
 
@@ -165,7 +165,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 
 
     public void setBrushSize(int size) {
-        brushSize = size;
+        brushSize = size/2;
     }
 
     public void clearCanvas() {
