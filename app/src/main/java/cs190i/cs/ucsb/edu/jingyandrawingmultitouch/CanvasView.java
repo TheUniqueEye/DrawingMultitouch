@@ -181,6 +181,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
 
         paint.setStrokeWidth(brushSize);
         for (int size = mapPaths.size(), i = 0; i < size; i++) {
+            paint.setColor(colors[i]);
             Path path = mapPaths.get(i);
             if (path != null) {
                 paintCanvas.drawPath(path, paint);
